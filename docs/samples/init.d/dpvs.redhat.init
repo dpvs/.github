@@ -1,0 +1,63 @@
+#!/bin/sh
+#
+# Startup script for the dpvs daemon
+#
+# processname: dpvs
+# pidfile: /var/run/dpvs.pid
+# config: /etc/dpvs/dpvs.conf
+# chkconfig: - 21 79
+# description: Start and stop dpvs
+
+# Source function library
+. /etc/rc.d/init.d/functions
+
+# Source configuration file (we set DPVS_OPTIONS there)
+. /etc/default/dpvs
+
+RETVAL=0
+
+prog="dpvs"
+
+start() {
+    echo -n $"Starting $prog: "
+    daemon dpvs ${DPVS_OPTIONS}
+    RETVAL=$?
+    echo
+    [ $RETVAL -eq 0 ] && touch /var/lock/subsys/$prog
+}
+
+stop() {
+    echo -n $"Stopping $prog: "
+    killproc dpvs
+    RETVAL=$?
+    echo
+    [ $RETVAL -eq 0 ] && rm -f /var/lock/subsys/$prog
+}
+
+testconfig() {
+    echo -n $"Reloading $prog: "
+    killproc dpvs -1
+    RETVAL=$?
+    echo
+}
+
+# See how we were called.
+case "$1" in
+    start)
+        start
+        ;;
+    stop)
+        stop
+        ;;
+    test)
+        testconfig
+        ;;
+    status)
+        status dpvs
+        ;;
+    *)
+        echo "Usage: $0 {start|stop|test|status}"
+        exit 1
+esac
+
+exit $RETVAL

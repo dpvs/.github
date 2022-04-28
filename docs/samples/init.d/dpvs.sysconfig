@@ -1,0 +1,18 @@
+# Options for dpvs. See `dpvs --help' output and dpvs(8) and
+# dpvs.conf(5) man pages for a list of all options. Here are the most
+# common ones :
+#
+# -l <core1,..>	core list
+# -c <file>	set config file(default: /etc/dpvs/dpvs.conf)
+# -p <file>	set pid file(default: /var/run/dpvs.pid)
+# -P		test config file
+# -I		test config file and init 
+# -d		daemon mode
+# 
+#
+#./bin/dpvs -n -l -d -f ./docs/udp/dpvs.conf
+#./bin/dpvs -l 1,2,3  -- -c  ./etc/dpvs.conf 2>&1
+
+DPVS_OPTIONS="-l 1,2,3 -d -c /etc/dpvs/dpvs.conf -s /etc/dpvs/post_script.sh"
+ULIMIT="-c unlimited"
+
